@@ -66,6 +66,9 @@ airflow:
       slots: 10
       description: "example pool with 5 slots"
 
+  extraPipPackages:
+    - "airflow-exporter"
+
 ###################################
 # Airflow - Scheduler Configs
 ###################################
@@ -308,3 +311,32 @@ externalDatabase:
 ###################################
 redis:
   enabled: true
+
+######################################
+# Prometheus Operator - ServiceMonitor
+######################################
+serviceMonitor:
+  ## if ServiceMonitor resources should be deployed for airflow webserver
+  ##
+  ## WARNING:
+  ## - you will need an exporter in your airflow docker container, for example:
+  ##   https://github.com/epoch8/airflow-exporter
+  ##
+  ## NOTE:
+  ## - you can install pip packages with `airflow.extraPipPackages`
+  ## - ServiceMonitor is a resource from: https://github.com/prometheus-operator/prometheus-operator
+  ##
+  enabled: true
+
+  ## labels for ServiceMonitor, so that Prometheus can select it
+  ##
+  selector:
+    prometheus: airflow-web
+
+  ## the ServiceMonitor web endpoint path
+  ##
+  path: /admin/metrics
+
+  ## the ServiceMonitor web endpoint interval
+  ##
+  interval: "30s"
