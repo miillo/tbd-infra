@@ -18,6 +18,17 @@ resource "google_storage_bucket_iam_binding" "binding" {
   ]
 }
 
+resource "kubernetes_secret" "git_secret" {
+  metadata {
+    name = "airflow-ssh-git-secret"
+    namespace = "default"
+  }
+
+  data = {
+    "id_rsa" = file(var.git_secret_path)
+  }
+}
+
 resource "helm_release" "kube-airflow" {
   name = "airflow-stable"
   repository = "https://airflow-helm.github.io/charts"
@@ -29,4 +40,5 @@ resource "helm_release" "kube-airflow" {
   values = [
     file("${path.module}/resources/config.yaml")
   ]
+  depends_on = [kubernetes_secret.git_secret]
 }

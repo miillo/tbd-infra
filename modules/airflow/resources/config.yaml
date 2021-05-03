@@ -14,11 +14,11 @@ airflow:
   ##
   config:
     ## security
-    AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "False"
+    AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "True"
 
     ## dags
-    AIRFLOW__CORE__LOAD_EXAMPLES: "True"
-    AIRFLOW__SCHEDULER__DAG_DIR_LIST_INTERVAL: "30"
+    AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+    AIRFLOW__SCHEDULER__DAG_DIR_LIST_INTERVAL: "60"
 
   ## a list of initial users to create
   ##
@@ -229,6 +229,16 @@ dags:
   ## the airflow dags folder
   ##
   path: /opt/airflow/dags
+
+  gitSync:
+    enabled: true
+    repo: "<YOUR_GIT_REPO_SSH_URL>"
+    branch: "main"
+    revision: "HEAD"
+    syncWait: 60
+    sshSecret: "airflow-ssh-git-secret"
+    sshSecretKey: "id_rsa"
+    sshKnownHosts: ""
 
 ###################################
 # Kubernetes - RBAC
