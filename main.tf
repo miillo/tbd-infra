@@ -34,17 +34,17 @@ module "postgres" {
   depends_on = [module.gke]
 }
 
-module "airflow" {
-  source = "./modules/airflow"
-  depends_on = [module.gke, module.postgres]
-  project_name = var.project_name
-  location = var.location
-  git_secret_path = "<PATH_TO_PRIVATE_SSH_KEY_FILE>"
-}
-
 module "spark" {
   source   = "./modules/spark"
   depends_on = [module.gke]
+}
+
+module "airflow" {
+  source = "./modules/airflow"
+  depends_on = [module.gke, module.postgres, module.spark]
+  project_name = var.project_name
+  location = var.location
+  git_secret_path = "<PATH_TO_PRIVATE_SSH_KEY_FILE>"
 }
 
 module "prometheus" {
