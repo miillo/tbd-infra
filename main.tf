@@ -37,6 +37,7 @@ module "postgres" {
 module "spark" {
   source   = "./modules/spark"
   depends_on = [module.gke]
+  location = var.location
 }
 
 module "airflow" {
